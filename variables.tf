@@ -34,5 +34,6 @@ variable "work_directory" {
 }
 
 variable "mcm_hub_ip" {
-  descripton = "hub ip address"
+  description = "hub ip address"
+  default     = ""
 }
