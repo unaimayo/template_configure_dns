@@ -84,7 +84,7 @@ function verifyTargetClusterInformation() {
     fi
 
     ## Configure kubectl
-    installKubectlLocally
+    installKubectlAndHelmLocally
     ${WORK_DIR}/bin/kubectl config set-cluster     ${CLUSTER_NAME} --insecure-skip-tls-verify=true --server=${CLUSTER_ENDPOINT}
     ${WORK_DIR}/bin/kubectl config set-credentials ${CLUSTER_USER} --token=${CLUSTER_TOKEN}
     ${WORK_DIR}/bin/kubectl config set-context     ${CLUSTER_NAME} --user=${CLUSTER_USER} --namespace=kube-system --cluster=${CLUSTER_NAME}
@@ -147,7 +147,7 @@ helm repo add stable https://kubernetes-charts.storage.googleapis.com
 helm install coredns --namespace=coredns stable/coredns
 # update coredns configuration
 kubectl get -o yaml configmap coredns-coredns -n coredns > ${WORK_DIR}/cm-coredns.yaml
-sed -i "s/prometheus/hosts {\n          194.224.53.178 cp-proxy.apps.cloudgarden.telefonica.com cp-console.apps.cloudgarden.telefonica.com api.cloudgarden.telefonica.com\n          fallthrough\n        }\n        prometheus/" ${WORK_DIR}/cm-coredns.yaml
+sed -i "s/prometheus/hosts {\n          ${MCM_HUB_IP} cp-proxy.apps.cloudgarden.telefonica.com cp-console.apps.cloudgarden.telefonica.com api.cloudgarden.telefonica.com\n          fallthrough\n        }\n        prometheus/" ${WORK_DIR}/cm-coredns.yaml
 kubectl apply -f ${WORK_DIR}/cm-coredns.yaml
 # update kubedns configuration
 clusterIP=`kubectl -n coredns get service coredns-coredns -o jsonpath='{.spec.clusterIP}'`
