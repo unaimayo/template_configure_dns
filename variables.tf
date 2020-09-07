@@ -23,6 +23,10 @@ variable "cluster_token" {
   default     = ""
 }
 
+variable "cluster_config" {
+  description = "kubectl configuration text, Base64 encoded"
+}
+
 variable "cluster_credentials" {
   description = "JSON-formatted file containing the cluster name, endpoint, user and token information"
   default     = ""

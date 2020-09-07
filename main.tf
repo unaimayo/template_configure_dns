@@ -25,18 +25,16 @@ module "cluster-credentials" {
 
 resource "null_resource" "configure-dns" {
   dependsOn      = module.cluster-credentials.credentials_generated
-  work_directory = "mcm${random_string.random-dir.result}"
 
   ## Details for accessing and configuring the target cluster
   mcm_hub_ip          = var.mcm_hub_ip
   cluster_name        = var.cluster_name
   cluster_credentials = module.cluster-credentials.credentials_jsonfile
-  cluster_namespace   = var.cluster_namespace
 
   provisioner "local-exec" {
     command = "chmod 755 ${path.module}/scripts/configure_dns.sh && ${path.module}/scripts/configure_dns.sh"
     environment = {
-      WORK_DIR            = var.work_directory
+      WORK_DIR            = "mcm${random_string.random-dir.result}"
       MCM_HUB_IP          = var.mcm_hub_ip
       CLUSTER_NAME        = var.cluster_name
       CLUSTER_ENDPOINT    = var.cluster_endpoint
