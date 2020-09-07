@@ -24,7 +24,7 @@ module "cluster-credentials" {
 }
 
 resource "null_resource" "configure-dns" {
-  depends_on = module.cluster-credentials.credentials_generated
+  depends_on = [module.cluster-credentials.credentials_generated]
 
   provisioner "local-exec" {
     command = "chmod 755 ${path.module}/scripts/configure_dns.sh && ${path.module}/scripts/configure_dns.sh"
