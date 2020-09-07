@@ -24,12 +24,7 @@ module "cluster-credentials" {
 }
 
 resource "null_resource" "configure-dns" {
-  dependsOn      = module.cluster-credentials.credentials_generated
-
-  ## Details for accessing and configuring the target cluster
-  mcm_hub_ip          = var.mcm_hub_ip
-  cluster_name        = var.cluster_name
-  cluster_credentials = module.cluster-credentials.credentials_jsonfile
+  depends_on = module.cluster-credentials.credentials_generated
 
   provisioner "local-exec" {
     command = "chmod 755 ${path.module}/scripts/configure_dns.sh && ${path.module}/scripts/configure_dns.sh"
@@ -40,7 +35,7 @@ resource "null_resource" "configure-dns" {
       CLUSTER_ENDPOINT    = var.cluster_endpoint
       CLUSTER_USER        = var.cluster_user
       CLUSTER_TOKEN       = var.cluster_token
-      CLUSTER_CREDENTIALS = var.cluster_credentials
+      CLUSTER_CREDENTIALS = module.cluster-credentials.credentials_jsonfile
     }
   }
 }

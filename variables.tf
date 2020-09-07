@@ -1,8 +1,3 @@
-variable "dependsOn" {
-  description = "Variable to force dependency between modules"
-  default     = "true"
-}
-
 variable "cluster_name" {
   description = "Name of the Kubernetes cluster"
   default     = ""
@@ -30,6 +25,10 @@ variable "cluster_config" {
 variable "cluster_credentials" {
   description = "JSON-formatted file containing the cluster name, endpoint, user and token information"
   default     = ""
+}
+
+variable "service_account_credentials" {
+  description = "Credentials for service account used to access the cluster (Base64-encoded)"
 }
 
 variable "work_directory" {
